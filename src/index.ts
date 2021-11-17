@@ -6,10 +6,10 @@ const app = new Application({
 	autoDensity: true,
 	backgroundColor: 0x6495ed,
 	width: 640,
-	height: 480
+	height: 480,
 });
 
-const clampy: Sprite = Sprite.from("clampy.png");
+const clampy: Sprite = Sprite.from("https://i.imgur.com/OGFoonY.jpeg");
 
 clampy.anchor.set(0.5);
 
