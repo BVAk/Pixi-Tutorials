@@ -1,4 +1,4 @@
-import { Application, Sprite } from 'pixi.js'
+import { Application, Sprite, Container } from 'pixi.js'
 
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
@@ -7,13 +7,21 @@ const app = new Application({
 	backgroundColor: 0x6495ed,
 	width: 640,
 	height: 480,
-});
+})
 
-const clampy: Sprite = Sprite.from("https://i.imgur.com/OGFoonY.jpeg");
+const conty: Container = new Container();
+conty.x = 200;
+conty.y = 0;
+app.stage.addChild(conty);
 
-clampy.anchor.set(0.5);
+const clampy: Sprite = Sprite.from("images/clampy.png");
+clampy.x = 10;
+clampy.y = 100;
 
-clampy.x = app.screen.width / 2;
-clampy.y = app.screen.height / 2;
+// clampy.anchor.set(0.5);
+
+// clampy.x = app.screen.width / 2;
+// clampy.y = app.screen.height / 2;
 
 app.stage.addChild(clampy);
+
