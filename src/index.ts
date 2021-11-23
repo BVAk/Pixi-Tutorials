@@ -1,37 +1,41 @@
-import { Application, Sprite, Container } from 'pixi.js'
+import { Application, Sprite, Texture, Container } from 'pixi.js'
 
 const app = new Application({
-	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
-	resolution: window.devicePixelRatio || 1,
-	autoDensity: true,
-	backgroundColor: 0x6495ed,
-	width: 2040,
-	height: 1080,
-})
+    view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
+    width: 800, 
+    height: 600,
+    backgroundColor: 0x1099bb, 
+    resolution: window.devicePixelRatio || 1,
+});
+// document.body.appendChild(app.view);
 
-const conty: Container = new Container();
-conty.x = 200;
-conty.y = 0;
-app.stage.addChild(conty);
+const container = new Container();
 
-const clampy: Sprite = Sprite.from("images/clampy.png");
-clampy.x = 10;
-clampy.y = 100;
-conty.addChild(clampy);
+app.stage.addChild(container);
 
-const conty2: Container = new Sprite();
-conty2.x = 600;
-conty2.y = 0;
-conty.addChild(conty2);
+// Create a new texture
+const texture = Texture.from('images/bunny.png');
 
-const clampy2: Sprite = Sprite.from("images/clampy.png");
-clampy2.x = 100;
-clampy2.y = 100;
-conty2.addChild(clampy2);
+// Create a 5x5 grid of bunnies
+for (let i = 0; i < 25; i++) {
+    const bunny = new Sprite(texture);
+    bunny.anchor.set(0.5);
+    bunny.x = (i % 5) * 40;
+    bunny.y = Math.floor(i / 5) * 40;
+    container.addChild(bunny);
+}
 
-const clampy3: Sprite = Sprite.from("images/clampy.png");
-clampy3.x = 100;
-clampy3.y = 300;
-conty2.addChild(clampy3);
+// Move container to the center
+container.x = app.screen.width / 2 - 50;
+container.y = app.screen.height / 2 - 100;
 
-conty.rotation = 90;
+// Center bunny sprite in local container coordinates
+container.pivot.x = container.width / 2;
+container.pivot.y = container.height / 2;
+
+// Listen for animate update
+app.ticker.add((delta) => {
+    // rotate the container!
+    // use delta to create frame-independent transform
+    container.rotation -= 0.01 * delta;
+});
