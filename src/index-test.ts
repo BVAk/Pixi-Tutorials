@@ -19,5 +19,5 @@ graphy.endFill();
 app.stage.addChild(graphy); //I can add it before setting position, nothing bad will happen.
 
 // Here we set it at 100,100
-graphy.x = 100;
+graphy.x = 200;
 graphy.y = 100;
