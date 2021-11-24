@@ -1,41 +1,51 @@
-import { Application, Sprite, Texture, Container } from 'pixi.js'
+import { Application, Sprite, Container, Graphics } from 'pixi.js'
+import { BlurFilter } from '@pixi/filter-blur';
+
+// PIXI.useDeprecated();
+// window.__PIXI_INSPECTOR_GLOBAL_HOOK__ &&
+// window.__PIXI_INSPECTOR_GLOBAL_HOOK__.register({ PIXI: PIXI });
 
 const app = new Application({
-    view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
-    width: 800, 
-    height: 600,
-    backgroundColor: 0x1099bb, 
-    resolution: window.devicePixelRatio || 1,
-});
-// document.body.appendChild(app.view);
+	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
+	resolution: window.devicePixelRatio || 1,
+	autoDensity: true,
+	backgroundColor: 0x6495ed,
+	width: 2040,
+	height: 1080,
+})
 
-const container = new Container();
+let container = new Container();
 
 app.stage.addChild(container);
+let sprite = Sprite.from("https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/IaUrttj.png");
 
-// Create a new texture
-const texture = Texture.from('images/bunny.png');
+sprite.width = 512;
+sprite.height = 512;
 
-// Create a 5x5 grid of bunnies
-for (let i = 0; i < 25; i++) {
-    const bunny = new Sprite(texture);
-    bunny.anchor.set(0.5);
-    bunny.x = (i % 5) * 40;
-    bunny.y = Math.floor(i / 5) * 40;
-    container.addChild(bunny);
-}
+// Adds a sprite as a child to this container. As a result, the sprite will be rendered whenever the container
+// is rendered.
+container.addChild(sprite);
 
-// Move container to the center
-container.x = app.screen.width / 2 - 50;
-container.y = app.screen.height / 2 - 100;
+// Blurs whatever is rendered by the container
+container.filters = [new BlurFilter()];
 
-// Center bunny sprite in local container coordinates
-container.pivot.x = container.width / 2;
-container.pivot.y = container.height / 2;
+// Only the contents within a circle at the center should be rendered onto the screen.
+container.mask = new Graphics()
+ .beginFill(0xffffff)
+ .drawCircle(sprite.width / 2, sprite.height / 2, Math.min(sprite.width, sprite.height) / 2)
+ .endFill();
 
-// Listen for animate update
-app.ticker.add((delta) => {
-    // rotate the container!
-    // use delta to create frame-independent transform
-    container.rotation -= 0.01 * delta;
-});
+
+const graphy = new Graphics();
+
+// we give instructions in order. begin fill, line style, draw circle, end filling
+graphy.beginFill(0xFF00FF);
+graphy.lineStyle(10, 0x00FF00);
+graphy.drawCircle(0, 0, 25); // See how I set the drawing at 0,0? NOT AT 100, 100!
+graphy.endFill();
+
+app.stage.addChild(graphy); //I can add it before setting position, nothing bad will happen.
+
+// Here we set it at 100,100
+graphy.x = 100;
+graphy.y = 100;
