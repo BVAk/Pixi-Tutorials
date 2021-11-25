@@ -1,51 +1,56 @@
-import { Application, Sprite, Container, Graphics } from 'pixi.js'
-import { BlurFilter } from '@pixi/filter-blur';
-
-// PIXI.useDeprecated();
-// window.__PIXI_INSPECTOR_GLOBAL_HOOK__ &&
-// window.__PIXI_INSPECTOR_GLOBAL_HOOK__.register({ PIXI: PIXI });
-
+import { Application, BitmapFont, BitmapText, TextStyle, Text, Sprite } from 'pixi.js'
+import { BlurFilter } from "@pixi/filter-blur";
 const app = new Application({
-	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
-	resolution: window.devicePixelRatio || 1,
-	autoDensity: true,
-	backgroundColor: 0x6495ed,
-	width: 2040,
-	height: 1080,
+    view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
+    width: 800, 
+    height: 600,
+    backgroundColor: 0x1099bb, 
+    resolution: window.devicePixelRatio || 1,
+});
+// document.body.appendChild(app.view);
+const styly: TextStyle = new TextStyle({
+    align: "center",
+    fill: "#754c24",
+    fontSize: 42
+});
+const texty: Text = new Text('私に気づいて先輩！', styly); // Text supports unicode!
+texty.text = "This is expensive to change, please do not abuse";
+texty.position.y = 100;
+
+app.stage.addChild(texty);
+BitmapFont.from("comic 32", {
+    fill: "#ffffff", // White, will be colored later
+    fontFamily: "Comic Sans MS",
+    fontSize: 32
 })
 
-let container = new Container();
+// Remember, this font only has letters and numbers. No commas or any other symbol.
+const bitmapTexty: BitmapText = new BitmapText("I love baking, my family, and my friends",
+    {
+        fontName: "comic 32",
+        fontSize: 32, // Making it too big or too small will look bad
+        tint: 0xFF0000 // Here we make it red.
+    });
 
-app.stage.addChild(container);
-let sprite = Sprite.from("https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/IaUrttj.png");
+bitmapTexty.text = "This is cheap";
+bitmapTexty.text = "Change it as much as you want";
 
-sprite.width = 512;
-sprite.height = 512;
+app.stage.addChild(bitmapTexty);
 
-// Adds a sprite as a child to this container. As a result, the sprite will be rendered whenever the container
-// is rendered.
-container.addChild(sprite);
+// import the filters
+// If you are using pixijs < 6 you might need to import `filters`
 
-// Blurs whatever is rendered by the container
-container.filters = [new BlurFilter()];
+// Make your filter
+const myBlurFilter = new BlurFilter();
+const clampy: Sprite = Sprite.from("images/clampy.png");
 
-// Only the contents within a circle at the center should be rendered onto the screen.
-container.mask = new Graphics()
- .beginFill(0xffffff)
- .drawCircle(sprite.width / 2, sprite.height / 2, Math.min(sprite.width, sprite.height) / 2)
- .endFill();
+clampy.anchor.set(0.5);
 
+// Add it to the `.filters` array of any DisplayObject
+clampy.filters = [myBlurFilter];
 
-const graphy = new Graphics();
+// setting it to "the middle of the screen
+clampy.x = app.screen.width / 2;
+clampy.y = app.screen.height / 2;
 
-// we give instructions in order. begin fill, line style, draw circle, end filling
-graphy.beginFill(0xFF00FF);
-graphy.lineStyle(10, 0x00FF00);
-graphy.drawCircle(0, 0, 25); // See how I set the drawing at 0,0? NOT AT 100, 100!
-graphy.endFill();
-
-app.stage.addChild(graphy); //I can add it before setting position, nothing bad will happen.
-
-// Here we set it at 100,100
-graphy.x = 100;
-graphy.y = 100;
+app.stage.addChild(clampy);

@@ -17,7 +17,7 @@ app.stage.addChild(container);
 const texture = Texture.from('images/bunny.png');
 
 // Create a 5x5 grid of bunnies
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 100; i++) {
     const bunny = new Sprite(texture);
     // bunny.anchor.set(0.5);
     bunny.x = (i % 10) * 40;
